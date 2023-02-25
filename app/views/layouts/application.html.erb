@@ -11,6 +11,10 @@
   </head>
 
   <body class="<%= params[:action] %>">
+    <header style="position:absolute;right:100px;">
+      <%= link_to "日本語", url_for(locale: "ja") %>
+      <%= link_to "English", url_for(locale: "en") %>
+    </header>
     <%= yield %>
   </body>
 </html>
