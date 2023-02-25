@@ -80,4 +80,6 @@ group :test do
 end
 
 gem 'carrierwave'
+gem 'devise'
 gem 'kaminari'
+gem 'letter_opener_web'

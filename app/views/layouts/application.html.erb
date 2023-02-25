@@ -11,6 +11,9 @@
   </head>
 
   <body class="<%= params[:action] %>">
+    <p class="notice"><%= notice %></p> <%# devise %>
+    <p class="alert"><%= alert %></p> <%# devise %>
+
     <%= yield %>
   </body>
 </html>
