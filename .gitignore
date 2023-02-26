@@ -37,3 +37,7 @@
 /public/uploads
 
 .env
+
+# testファイル
+/test
+/app/helper
