@@ -216,10 +216,6 @@ en:
       short: "%d %b %H:%M"
     pm: pm
   books:
-    title: Title
-    memo: Memo
-    author: Author
-    picture: Pictuire
     title_index: Books
     title_new: New book
     title_edit: Editing book
