@@ -182,10 +182,6 @@ ja:
       short: "%m/%d %H:%M"
     pm: 午後
   books:
-    title: タイトル
-    memo: メモ
-    author: 著者
-    picture: 画像
     title_index: 本棚
     title_new: 本を追加
     title_edit: 本を編集
