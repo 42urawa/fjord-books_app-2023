@@ -14,12 +14,12 @@
 
     <p class="navbar-text pull-right">
       <% if user_signed_in? %>
-        <%= t('devise.shared.links.sign_in_with_provider', provider: current_user.email) %>  
+        <%= t('devise.shared.links.sign_in_with_provider', provider: current_user.email) %>
         <%= link_to t('devise.shared.links.edit'), edit_user_registration_path, class: 'navbar-link' %> |
-        <%= button_to t('devise.shared.links.sign_out'), destroy_user_session_path, method: :delete, class: 'navbar-link'  %>
+        <%= button_to t('devise.shared.links.sign_out'), destroy_user_session_path, method: :delete, class: 'navbar-link' %>
       <% else %>
-        <%= link_to t('devise.shared.links.sign_up'), new_user_registration_path, class: 'navbar-link'  %> |
-        <%= link_to t('devise.shared.links.sign_in'), new_user_session_path, class: 'navbar-link'  %>
+        <%= link_to t('devise.shared.links.sign_up'), new_user_registration_path, class: 'navbar-link' %> |
+        <%= link_to t('devise.shared.links.sign_in'), new_user_session_path, class: 'navbar-link' %>
       <% end %>
     </p>
 
