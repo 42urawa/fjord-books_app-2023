@@ -9,3 +9,7 @@ ja:
         memo: メモ
         picture: 画像
         title: タイトル
+      user:
+        zipcode: 郵便番号
+        address: 住所
+        introduction: 自己紹介

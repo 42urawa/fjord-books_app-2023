@@ -1,0 +1,8 @@
+# Additional translations at https://github.com/heartcombo/devise/wiki/I18n
+
+ja:
+  devise:
+    shared:
+      links:
+        edit: 編集
+        sign_out: ログアウト
