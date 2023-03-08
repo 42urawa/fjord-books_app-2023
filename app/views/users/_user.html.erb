@@ -25,4 +25,18 @@
     <%= user.self_introduction %>
   </p>
 
+  <% p 'テストテスト' %>
+  <% p user.avatar.attached? %>
+  <% p user.avatar.class %>
+  <% p user.avatar.methods %>
+  <% if user.avatar.attached? %>
+    <p>
+      <strong><%= User.human_attribute_name(:avatar) %>:</strong>
+      <%#= image_tag user.avatar.resize "100x100>" %>
+      <%#= image_tag user.avatar.variant(resize_to_limit: [100, 100]) %>
+      <%#= image_tag user.avatar.variant(resize_to_limit:[100, 100],colorspace: "b-w",rotate: "-90").processed %>
+      <%= image_tag user.avatar %>
+    </p>
+  <% end %>
+
 </div>
