@@ -38,3 +38,6 @@
 
 .env
 .idea/
+/test
+/app/helpers
+/app/views/reports/*json*
