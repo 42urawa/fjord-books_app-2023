@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 class ReportsController < ApplicationController
-  before_action :set_report, only: %i[ show edit update destroy ]
+  before_action :set_report, only: %i[show edit update destroy]
 
   # GET /reports or /reports.json
   def index
-    @reports = Report.all
+    @reports = Report.order(:id).page(params[:page])
   end
 
   # GET /reports/1 or /reports/1.json
