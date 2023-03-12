@@ -21,7 +21,15 @@ class ReportsController < ApplicationController
 
   # POST /reports or /reports.json
   def create
+    # p 'テストテスト'
+    # p current_user
+    # p report_params
     @report = Report.new(report_params)
+    p 'テストテスト'
+    p @report
+    p @report.class
+    @report.user_id = current_user.id
+    p @report.class
 
     respond_to do |format|
       if @report.save
