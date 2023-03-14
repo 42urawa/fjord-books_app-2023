@@ -37,7 +37,8 @@
 /public/uploads
 
 .env
-
+.idea/
 # testファイル
 /test
-/app/helper
+/app/helpers/
+/app/views/reports/
