@@ -25,11 +25,13 @@
     <%= user.self_introduction %>
   </p>
 
-  <% if user.avatar.attached? %>
-    <p>
-      <strong><%= User.human_attribute_name(:avatar) %>:</strong>
+  <p>
+    <strong><%= User.human_attribute_name(:avatar) %>:</strong>
+    <% if user.avatar.attached? %>
       <%= image_tag user.avatar.variant(:thumb) %>
-    </p>
-  <% end %>
+    <% else %>
+      <%= image_tag 'default_avatar.png' %>
+    <% end %>
+  </p>
 
 </div>
