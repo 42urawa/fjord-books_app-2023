@@ -11,6 +11,8 @@ class ReportsController < ApplicationController
 
   # GET /reports/1 or /reports/1.json
   def show
+    @comments = @report.comments.order(:id)
+    @comment = Comment.new
   end
 
   # GET /reports/new
@@ -24,15 +26,8 @@ class ReportsController < ApplicationController
 
   # POST /reports or /reports.json
   def create
-    # p 'テストテスト'
-    # p current_user
-    # p report_params
     @report = Report.new(report_params)
-    p 'テストテスト'
-    p @report
-    p @report.class
     @report.user_id = current_user.id
-    p @report.class
 
     respond_to do |format|
       if @report.save
@@ -50,10 +45,8 @@ class ReportsController < ApplicationController
     respond_to do |format|
       if @report.update(report_params)
         format.html { redirect_to report_url(@report), notice: "Report was successfully updated." }
-        format.json { render :show, status: :ok, location: @report }
       else
         format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @report.errors, status: :unprocessable_entity }
       end
     end
   end
