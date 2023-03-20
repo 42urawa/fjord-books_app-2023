@@ -4,9 +4,14 @@
     <%= l report.created_at, format: :created_at_for_report %>
   </p>
 
+<!--  <p>-->
+<!--    <strong><%#= Report.human_attribute_name(:user) %>:</strong>-->
+    <%#= [User.find(report.user_id).name, User.find(report.user_id).email].find(&:present?) %>
+<!--  </p>-->
+
   <p>
     <strong><%= Report.human_attribute_name(:user) %>:</strong>
-    <%= [User.find(report.user_id).name, User.find(report.user_id).email].find(&:present?) %>
+    <%= [report.user.name, report.user.email].find(&:present?) %>
   </p>
 
   <p>

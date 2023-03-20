@@ -19,7 +19,7 @@
 
           <p>
             <strong><%= Comment.human_attribute_name(:user_id) %>:</strong>
-            <%= User.find(comment.user_id).email %>
+            <%= [comment.user.name, comment.user.email].find(&:present?) %>
           </p>
 
           <p>
