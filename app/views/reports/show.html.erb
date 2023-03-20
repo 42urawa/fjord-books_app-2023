@@ -14,7 +14,7 @@
         <div id="<%= dom_id comment %>">
           <p>
             <strong><%= Comment.human_attribute_name(:created_at) %>:</strong>
-            <%= comment.created_at %>
+            <%= l comment.created_at, format: :created_at_for_comment %>
           </p>
 
           <p>
