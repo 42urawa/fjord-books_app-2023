@@ -1,4 +1,4 @@
-<p style="color: green"><%= notice %></p>
+<h1><%= t('views.common.title_show', name: Report.model_name.human) %></h1>
 
 <div class="show-item">
   <%= render @report %>
@@ -38,10 +38,11 @@
 </div>
 
 <nav class="page-nav">
-  <%= link_to t('views.common.new', name: Comment.model_name.human.downcase), new_comment_path %>
+  <%#= link_to t('views.common.new', name: Comment.model_name.human.downcase), new_comment_path(id: @report.id, type: "Report") %>
 </nav>
+<%#= @report.content %>
 
-<%= render 'comments/comment_form', comment: @comment, commentable: @report %>
+<%= render 'comments/comment_form', comment: @comment, commentable_id: @report.id, commentable_type: "Report", commentable: @report %>
 
 <div>
   <%= link_to t('views.common.edit', name: Report.model_name.human.downcase), edit_polymorphic_path(@report) if current_user.id == @report.user_id %>

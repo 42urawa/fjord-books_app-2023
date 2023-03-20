@@ -5,6 +5,14 @@ class CommentsController < ApplicationController
   before_action :correct_user, only: %i[edit update destroy]
 
   def new
+    p "テスト"
+    p params
+    @comment = Comment.new(user_id: current_user.id, commentable_id: params[:id].to_i, commentable_type: params[:type])
+    p @comment
+    p @report
+    @commentable_id = params[:id]
+    @commentable_type = params[:type]
+    p "テスト"
   end
 
   def create
@@ -13,13 +21,14 @@ class CommentsController < ApplicationController
     p comment_params[:body]
     p comment_params[:commentable]
     @comment = Comment.new(user_id: current_user.id, body: comment_params[:body], commentable: comment_params[:commentable])
+    p @comment
     @comment = Comment.new(comment_params)
     p "テストテスト"
     p @comment
 
     respond_to do |format|
       if @comment.save
-        format.html { redirect_to report_url(@comment.commentable), notice: "Comment was successfully created." }
+        format.html { redirect_to polymorphic_url(@comment.commentable), notice: "Comment was successfully created." }
       else
         format.html { render :new, status: :unprocessable_entity }
       end
@@ -54,7 +63,7 @@ class CommentsController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def comment_params
-    params.require(:comment).permit(:body)
+    params.require(:comment).permit(:body, :user_id, :commentable_id, :commentable_type)
     # params.require(:comment).permit(:body, :commentable)
   end
 
