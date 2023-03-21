@@ -3,6 +3,7 @@
 class Report < ApplicationRecord
   belongs_to :user
   has_many :comments, as: :commentable, dependent: :destroy
+  has_many :active_mentions, class_name: "Mention", foreign_key: :mentioning_id, dependent: :destroy
 
   validates :title, presence: true
   validates :content, presence: true
