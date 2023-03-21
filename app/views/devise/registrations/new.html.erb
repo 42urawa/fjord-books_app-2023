@@ -23,6 +23,8 @@
     <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
   </div>
 
+  <%= render 'devise/registrations/avatar_file_field', f: f %>
+
   <div class="actions">
     <%= f.submit t('.sign_up') %>
   </div>

@@ -14,6 +14,14 @@
 
   <%= render 'devise/registrations/profile_fields', f: f %>
 
+  <% if resource.avatar.attached? %>
+    <div class="field">
+      <%= image_tag resource.avatar.variant(:thumb) %>
+    </div>
+  <% end %>
+
+  <%= render 'devise/registrations/avatar_file_field', f: f %>
+
   <div class="field">
     <%= f.label :password %> <i>(<%= t('.leave_blank_if_you_don_t_want_to_change_it') %>)</i><br />
     <%= f.password_field :password, autocomplete: "new-password" %>
