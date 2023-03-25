@@ -2,7 +2,7 @@
 
 class ReportsController < ApplicationController
   before_action :set_report, only: %i[edit update destroy]
-  before_action :check_report_links, only: %i[update]
+  before_action :check_report_links, only: %i[create update]
 
   def index
     @reports = Report.includes(:user).order(id: :desc).page(params[:page])
@@ -24,6 +24,10 @@ class ReportsController < ApplicationController
     @report = current_user.reports.new(report_params)
 
     if @report.save
+      added_report_ids = @mentioning_report_ids
+
+      add_mentioning_reports(added_report_ids)
+
       redirect_to @report, notice: t('controllers.common.notice_create', name: Report.model_name.human)
     else
       render :new, status: :unprocessable_entity
@@ -32,15 +36,20 @@ class ReportsController < ApplicationController
 
   def update
     if @report.update(report_params)
-      added_report_ids = @mentioned_report_ids - @report.mentioning_reports.map(&:id)
-      deleted_report_ids = @report.mentioning_reports.map(&:id) - @mentioned_report_ids
+      registered_report_ids = @report.mentioning_reports.map(&:id)
+      added_report_ids = @mentioning_report_ids - registered_report_ids
+      deleted_report_ids = registered_report_ids - @mentioning_report_ids
 
-      added_report_ids.each do |id|
-        Mention.create(mentioning_id: @report.id, mentioned_id: id)
-      end
-      deleted_report_ids.each do |id|
-        Mention.find_by(mentioning_id: @report.id, mentioned_id: id).destroy
-      end
+      add_mentioning_reports(added_report_ids)
+      # added_report_ids.each do |id|
+      #   Mention.create(mentioning_id: @report.id, mentioned_id: id)
+      # end
+
+      delete_mentioning_reports(deleted_report_ids)
+      # deleted_report_ids.each do |id|
+      #   Mention.find_by(mentioning_id: @report.id, mentioned_id: id).destroy
+      # end
+
       redirect_to @report, notice: t('controllers.common.notice_update', name: Report.model_name.human)
     else
       render :edit, status: :unprocessable_entity
@@ -61,9 +70,21 @@ class ReportsController < ApplicationController
 
   def check_report_links
     domain = "http://localhost:3000/reports/"
-    content = report_params[:content]
-    @mentioned_report_ids = content.scan(/#{domain}[0-9]+/)
-                        .map { |url| url.split('/')[-1].to_i }
+    @mentioning_report_ids = report_params[:content]
+                              .scan(/#{domain}[0-9]+/)
+                              .map { |url| url.split('/')[-1].to_i }
+  end
+
+  def add_mentioning_reports(added_report_ids)
+    added_report_ids.each do |id|
+      Mention.create(mentioning_id: @report.id, mentioned_id: id)
+    end
+  end
+
+  def delete_mentioning_reports(deleted_report_ids)
+    deleted_report_ids.each do |id|
+      Mention.find_by(mentioning_id: @report.id, mentioned_id: id).destroy
+    end
   end
 
   def report_params
