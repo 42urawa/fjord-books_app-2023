@@ -59,11 +59,11 @@ class ReportsController < ApplicationController
   end
 
   def check_report_links
-    domain = "http://localhost:3000/reports/"
+    domain = 'http://localhost:3000/reports/'
     @mentioning_report_ids = report_params[:content]
-                              .scan(/#{domain}[0-9]+/)
-                              .map { |url| url.split('/')[-1].to_i }
-                              .uniq
+                             .scan(/#{domain}[0-9]+/)
+                             .map { |url| url.split('/')[-1].to_i }
+                             .uniq
   end
 
   def add_mentioning_reports(added_report_ids)
