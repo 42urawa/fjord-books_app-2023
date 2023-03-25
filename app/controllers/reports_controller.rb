@@ -22,12 +22,9 @@ class ReportsController < ApplicationController
 
   def create
     @report = current_user.reports.new(report_params)
-
     if @report.save
       added_report_ids = @mentioning_report_ids
-
       add_mentioning_reports(added_report_ids)
-
       redirect_to @report, notice: t('controllers.common.notice_create', name: Report.model_name.human)
     else
       render :new, status: :unprocessable_entity
@@ -41,14 +38,7 @@ class ReportsController < ApplicationController
       deleted_report_ids = registered_report_ids - @mentioning_report_ids
 
       add_mentioning_reports(added_report_ids)
-      # added_report_ids.each do |id|
-      #   Mention.create(mentioning_id: @report.id, mentioned_id: id)
-      # end
-
       delete_mentioning_reports(deleted_report_ids)
-      # deleted_report_ids.each do |id|
-      #   Mention.find_by(mentioning_id: @report.id, mentioned_id: id).destroy
-      # end
 
       redirect_to @report, notice: t('controllers.common.notice_update', name: Report.model_name.human)
     else
@@ -73,6 +63,7 @@ class ReportsController < ApplicationController
     @mentioning_report_ids = report_params[:content]
                               .scan(/#{domain}[0-9]+/)
                               .map { |url| url.split('/')[-1].to_i }
+                              .uniq
   end
 
   def add_mentioning_reports(added_report_ids)
