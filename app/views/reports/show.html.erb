@@ -4,6 +4,21 @@
   <%= render @report %>
 </div>
 
+<div>
+  この日報は以下の日報から言及されています　※要i18n
+</div>
+
+<div class="index-items">
+  <% @mentioning_reports.each do |mentioning_report| %>
+    <div class="index-item">
+      <%= render mentioning_report %>
+      <p>
+        <%= link_to t('views.common.show', name: Report.model_name.human.downcase), mentioning_report %>
+      </p>
+    </div>
+  <% end %>
+</div>
+
 <%= render 'shared/comments', commentable: @report %>
 
 <nav class="page-nav">
