@@ -10,11 +10,10 @@
   <% else %>
     <% @comments.each do |comment| %>
       <div class="index-item">
-        <%#= render comment %>
         <div id="<%= dom_id comment %>">
           <p>
             <strong><%= Comment.human_attribute_name(:created_at) %>:</strong>
-            <%= l comment.created_at, format: :created_at_for_comment %>
+            <%= l comment.created_at, format: :long %>
           </p>
 
           <p>
@@ -27,10 +26,8 @@
             <%= comment.body %>
           </p>
 
-          <p>
-          </p>
-            <%= link_to t('views.common.edit', name: Comment.model_name.human.downcase), edit_polymorphic_path(comment) if current_user.id == comment.user_id %>
-            <%= button_to t('views.common.destroy', name: Comment.model_name.human.downcase), comment, method: :delete if current_user.id == comment.user_id %>
+          <%= link_to t('views.common.edit', name: Comment.model_name.human.downcase), edit_polymorphic_path(comment) if current_user.id == comment.user_id %>
+          <%= button_to t('views.common.destroy', name: Comment.model_name.human.downcase), comment, method: :delete if current_user.id == comment.user_id %>
         </div>
       </div>
     <% end %>
