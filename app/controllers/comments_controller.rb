@@ -6,6 +6,7 @@ class CommentsController < ApplicationController
 
   def create
     @comment = Comment.new(comment_params)
+    @comment.user_id = current_user.id
     if @comment.save
       redirect_to polymorphic_url(@comment.commentable), notice: t('controllers.common.notice_create', name: Comment.model_name.human)
     else
@@ -19,6 +20,7 @@ class CommentsController < ApplicationController
   def edit; end
 
   def update
+    @comment.user_id = current_user.id
     if @comment.update(comment_params)
       redirect_to polymorphic_url(@comment.commentable), notice: t('controllers.common.notice_update', name: Comment.model_name.human)
     else

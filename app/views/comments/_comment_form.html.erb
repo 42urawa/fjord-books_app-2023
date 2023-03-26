@@ -14,7 +14,6 @@
   <div>
     <%= form.label :body, style: "display: block" %>
     <%= form.text_area :body, required: true %>
-    <%= form.hidden_field :user_id, value: current_user.id %>
     <%= form.hidden_field :commentable_id, value: commentable_id ||= @comment.commentable_id %>
     <%= form.hidden_field :commentable_type, value: commentable_type ||= @comment.commentable_type %>
   </div>
