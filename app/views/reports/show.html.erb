@@ -5,7 +5,7 @@
 </div>
 
 <div>
-  <%= t('views.common.mention', name: Report.model_name.human) %>
+  <%= t('views.common.mention', name: Report.model_name.human) if @mentioning_reports.present? %>
 </div>
 
 <div class="index-items">
