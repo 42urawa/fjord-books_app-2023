@@ -6,13 +6,10 @@ class CommentsController < ApplicationController
 
   def create
     @comment = Comment.new(comment_params)
-
-    respond_to do |format|
-      if @comment.save
-        format.html { redirect_to polymorphic_url(@comment.commentable), notice: t('controllers.common.notice_create', name: Comment.model_name.human) }
-      else
-        format.html { render :new, status: :unprocessable_entity }
-      end
+    if @comment.save
+      redirect_to polymorphic_url(@comment.commentable), notice: t('controllers.common.notice_create', name: Comment.model_name.human)
+    else
+      render :new, status: :unprocessable_entity
     end
   end
 
