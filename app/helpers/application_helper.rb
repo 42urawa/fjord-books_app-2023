@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 module ApplicationHelper
+  require 'uri'
   # localeに応じて複数形の表記を変える
   # - 日本語の場合 => 本
   # - 英語の場合 => books
@@ -17,5 +18,14 @@ module ApplicationHelper
 
   def format_content(content)
     safe_join(content.split("\n"), tag.br)
+  end
+
+  def text_url_to_link(text)
+    URI.extract(text, %w[http https]).uniq.each do |url|
+      linked_url = "<a href=#{url} target=\'_blank\'>#{url}</a>"
+      text.gsub!(url, linked_url)
+    end
+
+    text
   end
 end
