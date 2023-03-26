@@ -197,6 +197,7 @@ ja:
       error: エラー
       validation_error: "%{errors}があるため、この%{name}は保存できませんでした"
       title_show: "%{name}の詳細"
+      no_object: "%{name}はまだありません😹"
       sign_out: ログアウト
     pagination:
       first: '« 最初'
