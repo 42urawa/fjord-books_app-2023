@@ -34,7 +34,7 @@
   <% end %>
 </div>
 
-<%= render 'comments/comment_form', comment: @comment, commentable_id: @report.id, commentable_type: "Report", commentable: @report %>
+<%= render 'comments/comment_form', comment: @comment, commentable: @report %>
 
 <div>
   <%= link_to t('views.common.edit', name: Report.model_name.human.downcase), edit_polymorphic_path(@report) if current_user.id == @report.user_id %>

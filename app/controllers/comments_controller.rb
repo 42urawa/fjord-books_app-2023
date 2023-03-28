@@ -5,8 +5,10 @@ class CommentsController < ApplicationController
   before_action :correct_user, only: %i[edit update destroy]
 
   def create
-    @comment = Comment.new(comment_params)
-    @comment.user_id = current_user.id
+    @comment = current_user.comments.new(comment_params)
+    @comment.commentable_id = request.path.split('/')[2].to_i
+    @comment.commentable_type = request.path.split('/')[1].singularize.capitalize
+
     if @comment.save
       redirect_to polymorphic_url(@comment.commentable), notice: t('controllers.common.notice_create', name: Comment.model_name.human)
     else
@@ -46,6 +48,6 @@ class CommentsController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def comment_params
-    params.require(:comment).permit(:body, :user_id, :commentable_id, :commentable_type)
+    params.require(:comment).permit(:body)
   end
 end
