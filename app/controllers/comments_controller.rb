@@ -5,9 +5,9 @@ class CommentsController < ApplicationController
   before_action :correct_user, only: %i[edit update destroy]
 
   def create
+    model_class = request.path.split('/')[1].singularize.capitalize.constantize
     @comment = current_user.comments.new(comment_params)
-    @comment.commentable_id = request.path.split('/')[2].to_i
-    @comment.commentable_type = request.path.split('/')[1].singularize.capitalize
+    @comment.commentable = model_class.find(request.path.split('/')[2].to_i)
 
     if @comment.save
       redirect_to polymorphic_url(@comment.commentable), notice: t('controllers.common.notice_create', name: Comment.model_name.human)
