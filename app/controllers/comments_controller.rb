@@ -5,18 +5,12 @@ class CommentsController < ApplicationController
   before_action :correct_user, only: %i[edit update destroy]
 
   def create
-    resource, id = request.path.split('/')[1, 2]
-    commentable = {
-      'books' => Book.find(id),
-      'reports' => Report.find(id)
-    }[resource]
     @comment = current_user.comments.new(comment_params)
-    @comment.commentable = commentable
+    @comment.commentable = @commentable
 
     if @comment.save
       redirect_to polymorphic_url(@comment.commentable), notice: t('controllers.common.notice_create', name: Comment.model_name.human)
     else
-      @commentable = @comment.commentable
       @comments = @commentable.comments
       rendering_path = @comment.commentable_type.downcase.pluralize << '/show'
       render rendering_path, status: :unprocessable_entity

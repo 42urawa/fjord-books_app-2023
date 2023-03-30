@@ -1,10 +1,12 @@
 Rails.application.routes.draw do
   resources :books do
-    resources :comments, only: %i(create update)
+    resources :comments, only: %i(create update), module: 'books'
   end
+
   resources :reports do
-    resources :comments, only: %i(create update)
+    resources :comments, only: %i(create update), module: :reports
   end
+
   resources :comments, only: %i(edit destroy)
   mount LetterOpenerWeb::Engine, at: "/letter_opener" if Rails.env.development?
   devise_for :users
