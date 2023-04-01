@@ -7,5 +7,6 @@ class Books::CommentsController < CommentsController
 
   def set_commentable
     @commentable = @book = Book.find(params[:book_id])
+    @create_error_path = 'books/show'
   end
 end

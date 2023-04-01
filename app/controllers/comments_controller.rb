@@ -8,12 +8,11 @@ class CommentsController < ApplicationController
     @comment = current_user.comments.new(comment_params)
     @comment.commentable = @commentable
 
-    if false#@comment.save
+    if @comment.save
       redirect_to polymorphic_url(@comment.commentable), notice: t('controllers.common.notice_create', name: Comment.model_name.human)
     else
       @comments = @commentable.comments
-      rendering_path = @comment.commentable_type.downcase.pluralize << '/show'
-      render rendering_path, status: :unprocessable_entity
+      render @create_error_path, status: :unprocessable_entity
     end
   end
 

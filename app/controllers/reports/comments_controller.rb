@@ -7,5 +7,6 @@ class Reports::CommentsController < CommentsController
 
   def set_commentable
     @commentable = @report = Report.find(params[:report_id])
+    @create_error_path = 'reports/show'
   end
 end
