@@ -10,13 +10,13 @@ class BooksController < ApplicationController
 
   # GET /books/1 or /books/1.json
   def show
-    @comments = @commentable.comments.order(:id)
+    @comments = @book.comments.order(:id)
     @comment = Comment.new
   end
 
   # GET /books/new
   def new
-    @commentable = Book.new
+    @book = Book.new
   end
 
   # GET /books/1/edit
@@ -24,15 +24,15 @@ class BooksController < ApplicationController
 
   # POST /books or /books.json
   def create
-    @commentable = Book.new(book_params)
+    @book = Book.new(book_params)
 
     respond_to do |format|
-      if @commentable.save
-        format.html { redirect_to book_url(@commentable), notice: t('controllers.common.notice_create', name: Book.model_name.human) }
-        format.json { render :show, status: :created, location: @commentable }
+      if @book.save
+        format.html { redirect_to book_url(@book), notice: t('controllers.common.notice_create', name: Book.model_name.human) }
+        format.json { render :show, status: :created, location: @book }
       else
         format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @commentable.errors, status: :unprocessable_entity }
+        format.json { render json: @book.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -40,19 +40,19 @@ class BooksController < ApplicationController
   # PATCH/PUT /books/1 or /books/1.json
   def update
     respond_to do |format|
-      if @commentable.update(book_params)
-        format.html { redirect_to book_url(@commentable), notice: t('controllers.common.notice_update', name: Book.model_name.human) }
-        format.json { render :show, status: :ok, location: @commentable }
+      if @book.update(book_params)
+        format.html { redirect_to book_url(@book), notice: t('controllers.common.notice_update', name: Book.model_name.human) }
+        format.json { render :show, status: :ok, location: @book }
       else
         format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @commentable.errors, status: :unprocessable_entity }
+        format.json { render json: @book.errors, status: :unprocessable_entity }
       end
     end
   end
 
   # DELETE /books/1 or /books/1.json
   def destroy
-    @commentable.destroy
+    @book.destroy
 
     respond_to do |format|
       format.html { redirect_to books_url, notice: t('controllers.common.notice_destroy', name: Book.model_name.human) }
@@ -64,7 +64,7 @@ class BooksController < ApplicationController
 
   # Use callbacks to share common setup or constraints between actions.
   def set_book
-    @commentable = Book.find(params[:id])
+    @book = Book.find(params[:id])
   end
 
   # Only allow a list of trusted parameters through.

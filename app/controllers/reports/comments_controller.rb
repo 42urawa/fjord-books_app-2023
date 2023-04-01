@@ -6,6 +6,6 @@ class Reports::CommentsController < CommentsController
   private
 
   def set_commentable
-    @commentable = Report.find(params[:report_id])
+    @commentable = @report = Report.find(params[:report_id])
   end
 end
