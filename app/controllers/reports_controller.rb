@@ -4,6 +4,8 @@ class ReportsController < ApplicationController
   before_action :set_report, only: %i[edit update destroy]
   before_action :check_report_links, only: %i[create update]
 
+  DOMAIN = 'http://localhost:3000/reports/'
+
   def index
     @reports = Report.includes(:user).order(id: :desc).page(params[:page])
   end
@@ -58,7 +60,6 @@ class ReportsController < ApplicationController
   end
 
   def check_report_links
-    domain = 'http://localhost:3000/reports/'
     @mentioning_report_ids = report_params[:content]
                              .scan(/#{domain}[0-9]+/)
                              .map { |url| url.split('/')[-1].to_i }
