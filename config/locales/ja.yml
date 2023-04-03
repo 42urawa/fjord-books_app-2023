@@ -178,7 +178,7 @@ ja:
     am: 午前
     formats:
       default: "%Y年%m月%d日(%a) %H時%M分%S秒 %z"
-      long: "%Y/%m/%d %H:%M"
+      long: "%Y年%m月%d日 %H:%M"
       short: "%m/%d %H:%M"
     pm: 午後
   views:
@@ -195,6 +195,7 @@ ja:
       error: エラー
       validation_error: "%{errors}があるため、この%{name}は保存できませんでした"
       title_show: "%{name}の詳細"
+      no_object: "%{name}はまだありません😹"
       sign_out: ログアウト
     pagination:
       first: '« 最初'

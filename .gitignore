@@ -37,3 +37,6 @@
 /public/uploads
 
 .env
+/test
+/app/helpers
+/app/views/reports/*json*

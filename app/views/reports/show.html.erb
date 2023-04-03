@@ -1,7 +1,7 @@
-<h1><%= t('views.common.title_show', name: Book.model_name.human) %></h1>
+<h1><%= t('views.common.title_show', name: Report.model_name.human) %></h1>
 
 <div class="show-item">
-  <%= render 'books/book', book: @book %>
+  <%= render 'reports/report', report: @report %>
 </div>
 
 <div id="comments" class="index-items">
@@ -10,16 +10,15 @@
   <% else %>
     <% @comments.each do |comment| %>
       <div class="index-item">
-        <%#= render comment %>
         <div id="<%= dom_id comment %>">
           <p>
             <strong><%= Comment.human_attribute_name(:created_at) %>:</strong>
-            <%= comment.created_at %>
+            <%= l comment.created_at, format: :long %>
           </p>
 
           <p>
             <strong><%= Comment.human_attribute_name(:user_id) %>:</strong>
-            <%= User.find(comment.user_id).email %>
+            <%= [comment.user.name, comment.user.email].find(&:present?) %>
           </p>
 
           <p>
@@ -27,8 +26,6 @@
             <%= comment.body %>
           </p>
 
-          <p>
-          </p>
           <%= link_to t('views.common.edit', name: Comment.model_name.human.downcase), edit_polymorphic_path(comment) if current_user.id == comment.user_id %>
           <%= button_to t('views.common.destroy', name: Comment.model_name.human.downcase), comment, method: :delete if current_user.id == comment.user_id %>
         </div>
@@ -37,11 +34,14 @@
   <% end %>
 </div>
 
-<%= render 'comments/comment_form', comment: @comment, commentable: @book %>
+<%= render 'comments/comment_form', comment: @comment, commentable: @report %>
 
-<nav class="page-nav">
-  <%= link_to t('views.common.edit', name: Book.model_name.human.downcase), edit_book_path(@book) %> |
-  <%= link_to t('views.common.back', name: i18n_pluralize(Book.model_name.human.downcase)), books_path %>
+<div>
+  <%= link_to t('views.common.edit', name: Report.model_name.human.downcase), edit_polymorphic_path(@report) if current_user.id == @report.user_id %>
+  <% if current_user.id == @report.user_id %>
+    |
+  <% end %>
+  <%= link_to t('views.common.back', name: i18n_pluralize(Report.model_name.human.downcase)), reports_path %>
 
-  <%= button_to t('views.common.destroy', name: Book.model_name.human.downcase), @book, method: :delete %>
-</nav>
+  <%= button_to t('views.common.destroy', name: Report.model_name.human.downcase), @report, method: :delete if current_user.id == @report.user_id %>
+</div>
