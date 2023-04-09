@@ -26,4 +26,18 @@ class Report < ApplicationRecord
            .map { |url| url.split('/')[-1].to_i }
            .uniq
   end
+
+  def exec_transaction
+    success = true
+    ApplicationRecord.transaction do
+      success &= save
+      mentioning_report_ids.each do |id|
+        success &= Mention.create(mentioning_id: self.id, mentioned_id: id)
+      end
+      raise ActiveRecord::Rollback unless success
+    end
+    success
+  rescue StandardError
+    false
+  end
 end

@@ -21,10 +21,7 @@ class ReportsController < ApplicationController
   def create
     @report = current_user.reports.new(report_params)
 
-    if @report.save
-      ids = @report.mentioning_report_ids
-      # @report.add_mentioning_reports(ids)
-      add_mentioning_reports(ids)
+    if @report.exec_transaction
       redirect_to @report, notice: t('controllers.common.notice_create', name: Report.model_name.human)
     else
       render :new, status: :unprocessable_entity
