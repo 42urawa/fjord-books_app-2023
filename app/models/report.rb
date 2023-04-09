@@ -11,11 +11,19 @@ class Report < ApplicationRecord
   validates :title, presence: true
   validates :content, presence: true
 
+  DOMAIN = 'http://localhost:3000/reports/'
+
   def editable?(target_user)
     user == target_user
   end
 
   def created_on
     created_at.to_date
+  end
+
+  def mentioning_report_ids
+    content.scan(/#{DOMAIN}[0-9]+/)
+           .map { |url| url.split('/')[-1].to_i }
+           .uniq
   end
 end

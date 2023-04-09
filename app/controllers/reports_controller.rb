@@ -2,9 +2,6 @@
 
 class ReportsController < ApplicationController
   before_action :set_report, only: %i[edit update destroy]
-  before_action :check_report_links, only: %i[create update]
-
-  DOMAIN = 'http://localhost:3000/reports/'
 
   def index
     @reports = Report.includes(:user).order(id: :desc).page(params[:page])
@@ -23,9 +20,11 @@ class ReportsController < ApplicationController
 
   def create
     @report = current_user.reports.new(report_params)
+
     if @report.save
-      added_report_ids = @mentioning_report_ids
-      add_mentioning_reports(added_report_ids)
+      ids = @report.mentioning_report_ids
+      # @report.add_mentioning_reports(ids)
+      add_mentioning_reports(ids)
       redirect_to @report, notice: t('controllers.common.notice_create', name: Report.model_name.human)
     else
       render :new, status: :unprocessable_entity
@@ -35,8 +34,10 @@ class ReportsController < ApplicationController
   def update
     if @report.update(report_params)
       registered_report_ids = @report.mentioning_reports.map(&:id)
-      added_report_ids = @mentioning_report_ids - registered_report_ids
-      deleted_report_ids = registered_report_ids - @mentioning_report_ids
+      ids = @report.mentioning_report_ids
+
+      added_report_ids = ids - registered_report_ids
+      deleted_report_ids = registered_report_ids - ids
 
       add_mentioning_reports(added_report_ids)
       delete_mentioning_reports(deleted_report_ids)
@@ -57,13 +58,6 @@ class ReportsController < ApplicationController
 
   def set_report
     @report = current_user.reports.find(params[:id])
-  end
-
-  def check_report_links
-    @mentioning_report_ids = report_params[:content]
-                             .scan(/#{domain}[0-9]+/)
-                             .map { |url| url.split('/')[-1].to_i }
-                             .uniq
   end
 
   def add_mentioning_reports(added_report_ids)
