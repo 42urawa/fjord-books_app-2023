@@ -9,7 +9,7 @@
 </div>
 
 <div class="index-items">
-  <% @report.mentioned_reports.each do |mentioning_report| %>
+  <% @report.mentioned_reports.order(created_at: :desc).each do |mentioning_report| %>
     <div class="index-item">
       <%= render mentioning_report %>
       <p>
