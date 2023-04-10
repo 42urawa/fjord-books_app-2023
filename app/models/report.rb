@@ -21,21 +21,48 @@ class Report < ApplicationRecord
     created_at.to_date
   end
 
-  def mentioning_report_ids
+  def report_ids_in_content
     content.scan(/#{DOMAIN}[0-9]+/)
            .map { |url| url.split('/')[-1].to_i }
            .uniq
   end
 
-  def exec_transaction
+  def exec_create_transaction
     success = true
+
     ApplicationRecord.transaction do
       success &= save
-      mentioning_report_ids.each do |id|
+      report_ids_in_content.each do |id|
         success &= Mention.create(mentioning_id: self.id, mentioned_id: id)
       end
       raise ActiveRecord::Rollback unless success
     end
+
+    success
+  rescue StandardError
+    false
+  end
+
+  def exec_update_transaction(content)
+    success = true
+
+    ApplicationRecord.transaction do
+      success &= update(content)
+
+      inserted_report_ids =
+        report_ids_in_content - mentioning_reports.map(&:id)
+      deleted_report_ids =
+        mentioning_reports.map(&:id) - report_ids_in_content
+
+      inserted_report_ids.each do |id|
+        success &= Mention.create(mentioning_id: self.id, mentioned_id: id)
+      end
+
+      deleted_report_ids.each do |id|
+        success &= Mention.find_by(mentioning_id: self.id, mentioned_id: id).destroy
+      end
+    end
+
     success
   rescue StandardError
     false

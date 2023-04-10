@@ -21,7 +21,7 @@ class ReportsController < ApplicationController
   def create
     @report = current_user.reports.new(report_params)
 
-    if @report.exec_transaction
+    if @report.exec_create_transaction
       redirect_to @report, notice: t('controllers.common.notice_create', name: Report.model_name.human)
     else
       render :new, status: :unprocessable_entity
@@ -29,16 +29,7 @@ class ReportsController < ApplicationController
   end
 
   def update
-    if @report.update(report_params)
-      registered_report_ids = @report.mentioning_reports.map(&:id)
-      ids = @report.mentioning_report_ids
-
-      added_report_ids = ids - registered_report_ids
-      deleted_report_ids = registered_report_ids - ids
-
-      add_mentioning_reports(added_report_ids)
-      delete_mentioning_reports(deleted_report_ids)
-
+    if @report.exec_update_transaction(report_params)
       redirect_to @report, notice: t('controllers.common.notice_update', name: Report.model_name.human)
     else
       render :edit, status: :unprocessable_entity
@@ -55,18 +46,6 @@ class ReportsController < ApplicationController
 
   def set_report
     @report = current_user.reports.find(params[:id])
-  end
-
-  def add_mentioning_reports(added_report_ids)
-    added_report_ids.each do |id|
-      Mention.create(mentioning_id: @report.id, mentioned_id: id)
-    end
-  end
-
-  def delete_mentioning_reports(deleted_report_ids)
-    deleted_report_ids.each do |id|
-      Mention.find_by(mentioning_id: @report.id, mentioned_id: id).destroy
-    end
   end
 
   def report_params
