@@ -32,9 +32,8 @@ class Report < ApplicationRecord
 
     ApplicationRecord.transaction do
       success &= save
-      raise
-      report_ids_in_content.each do |id|
-        success &= Mention.create(mentioning_id: self.id, mentioned_id: id)
+      report_ids_in_content.each do |report_id|
+        success &= active_mentions.create(mentioned_id: report_id)
       end
       raise ActiveRecord::Rollback unless success
     end
@@ -42,23 +41,21 @@ class Report < ApplicationRecord
     success
   end
 
-  def exec_update_transaction(content)
+  def exec_update_transaction(report_params)
     success = true
 
     ApplicationRecord.transaction do
-      success &= update(content)
+      success &= update(report_params)
 
-      inserted_report_ids =
-        report_ids_in_content - mentioning_reports.map(&:id)
-      deleted_report_ids =
-        mentioning_reports.map(&:id) - report_ids_in_content
+      inserted_report_ids = report_ids_in_content - mentioning_reports.map(&:id)
+      deleted_report_ids = mentioning_reports.map(&:id) - report_ids_in_content
 
-      inserted_report_ids.each do |id|
-        success &= Mention.create(mentioning_id: self.id, mentioned_id: id)
+      inserted_report_ids.each do |report_id|
+        success &= active_mentions.create(mentioned_id: report_id)
       end
 
-      deleted_report_ids.each do |id|
-        success &= Mention.find_by(mentioning_id: self.id, mentioned_id: id).destroy
+      deleted_report_ids.each do |report_id|
+        success &= active_mentions.find_by(mentioned_id: report_id).destroy
       end
       raise ActiveRecord::Rollback unless success
     end
