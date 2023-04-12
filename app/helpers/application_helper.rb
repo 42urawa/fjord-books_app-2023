@@ -1,9 +1,6 @@
 # frozen_string_literal: true
 
-require 'rails_autolink'
-
 module ApplicationHelper
-  require 'uri'
   # localeに応じて複数形の表記を変える
   # - 日本語の場合 => 本
   # - 英語の場合 => books
