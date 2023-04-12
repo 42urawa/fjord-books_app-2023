@@ -32,6 +32,7 @@ class Report < ApplicationRecord
 
     ApplicationRecord.transaction do
       success &= save
+      raise
       report_ids_in_content.each do |id|
         success &= Mention.create(mentioning_id: self.id, mentioned_id: id)
       end
@@ -39,8 +40,6 @@ class Report < ApplicationRecord
     end
 
     success
-  rescue StandardError
-    false
   end
 
   def exec_update_transaction(content)
@@ -61,10 +60,9 @@ class Report < ApplicationRecord
       deleted_report_ids.each do |id|
         success &= Mention.find_by(mentioning_id: self.id, mentioned_id: id).destroy
       end
+      raise ActiveRecord::Rollback unless success
     end
 
     success
-  rescue StandardError
-    false
   end
 end
