@@ -11,7 +11,7 @@ class Report < ApplicationRecord
   validates :title, presence: true
   validates :content, presence: true
 
-  DOMAIN = 'http://localhost:3000/reports/'
+  REPORT_URL_REGEXP = %r!http://localhost:3000/reports/\d+!
 
   def editable?(target_user)
     user == target_user
@@ -22,7 +22,7 @@ class Report < ApplicationRecord
   end
 
   def report_ids_in_content
-    content.scan(/#{DOMAIN}[0-9]+/)
+    content.scan(REPORT_URL_REGEXP)
            .map { |url| url.split('/')[-1].to_i }
            .uniq
   end
