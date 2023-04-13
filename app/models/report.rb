@@ -21,7 +21,7 @@ class Report < ApplicationRecord
     created_at.to_date
   end
 
-  def report_ids_in_content
+  def find_report_url
     content.scan(REPORT_URL_REGEXP)
            .map { |url| url.split('/')[-1].to_i }
            .uniq
@@ -32,7 +32,7 @@ class Report < ApplicationRecord
 
     ApplicationRecord.transaction do
       success &= save
-      report_ids_in_content.each do |report_id|
+      find_report_url.each do |report_id|
         success &= active_mentions.create(mentioned_id: report_id)
       end
       raise ActiveRecord::Rollback unless success
@@ -46,6 +46,8 @@ class Report < ApplicationRecord
 
     ApplicationRecord.transaction do
       success &= update(report_params)
+
+      report_ids_in_content = find_report_url
 
       inserted_report_ids = report_ids_in_content - mentioning_reports.map(&:id)
       deleted_report_ids = mentioning_reports.map(&:id) - report_ids_in_content
