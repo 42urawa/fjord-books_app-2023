@@ -11,7 +11,7 @@ class Report < ApplicationRecord
   validates :title, presence: true
   validates :content, presence: true
 
-  REPORT_URL_REGEXP = %r!http://localhost:3000/reports/\d+!
+  REPORT_URL_REGEXP = %r{http://localhost:3000/reports/\d+}
 
   def editable?(target_user)
     user == target_user
