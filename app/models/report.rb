@@ -32,8 +32,8 @@ class Report < ApplicationRecord
 
     ApplicationRecord.transaction do
       success &= save
-      find_report_urls.each do |report_id|
-        success &= active_mentions.create(mentioned_id: report_id)
+      find_report_urls.each do |inserted_report_id|
+        success &= active_mentions.create(mentioned_id: inserted_report_id)
       end
       raise ActiveRecord::Rollback unless success
     end
@@ -53,12 +53,12 @@ class Report < ApplicationRecord
       inserted_report_ids = report_ids_in_content - report_ids_in_db
       deleted_report_ids = report_ids_in_db - report_ids_in_content
 
-      inserted_report_ids.each do |report_id|
-        success &= active_mentions.create(mentioned_id: report_id)
+      inserted_report_ids.each do |inserted_report_id|
+        success &= active_mentions.create(mentioned_id: inserted_report_id)
       end
 
-      deleted_report_ids.each do |report_id|
-        success &= active_mentions.find_by(mentioned_id: report_id).destroy
+      deleted_report_ids.each do |deleted_report_id|
+        success &= active_mentions.find_by(mentioned_id: deleted_report_id).destroy
       end
       raise ActiveRecord::Rollback unless success
     end
