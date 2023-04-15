@@ -196,8 +196,6 @@ ja:
       validation_error: "%{errors}があるため、この%{name}は保存できませんでした"
       title_show: "%{name}の詳細"
       sign_out: ログアウト
-      mention: "この%{name}は以下の%{name}で言及されています"
-      no_mention: "この%{name}は誰からも言及されていません"
     pagination:
       first: '« 最初'
       last: '最後 »'
@@ -218,6 +216,9 @@ ja:
       create: コメントする
       delete: 削除
       no_comments: コメントはまだありません
+    mentions:
+      mentions: この日報はは以下の日報で言及されています
+      no_mentions: この日報は誰からも言及されていません
   # devise-i18n-viewsをオーバーライド
   devise:
     registrations:
