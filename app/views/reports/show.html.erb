@@ -5,7 +5,7 @@
 </div>
 
 <div>
-  <% if @report.mentioned_reports.present? %>
+  <% if @report.mentioned_reports.exists? %>
     <%= t('views.common.mention', name: Report.model_name.human) %>
   <% else %>
     <%= t('views.common.no_mention', name: Report.model_name.human) %>
