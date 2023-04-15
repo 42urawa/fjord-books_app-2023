@@ -48,9 +48,10 @@ class Report < ApplicationRecord
       success &= update(report_params)
 
       report_ids_in_content = find_report_urls
+      report_ids_in_db = mentioning_reports.map(&:id)
 
-      inserted_report_ids = report_ids_in_content - mentioning_reports.map(&:id)
-      deleted_report_ids = mentioning_reports.map(&:id) - report_ids_in_content
+      inserted_report_ids = report_ids_in_content - report_ids_in_db
+      deleted_report_ids = report_ids_in_db - report_ids_in_content
 
       inserted_report_ids.each do |report_id|
         success &= active_mentions.create(mentioned_id: report_id)
