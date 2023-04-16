@@ -202,6 +202,10 @@ ja:
       previous: '‹ 前'
       next: '次 ›'
       truncate: '…'
+  reports:
+    show:
+      mentions: この日報は以下の日報で言及されています
+      no_mentions: この日報は誰からも言及されていません
   controllers:
     common:
       notice_create: "%{name}が作成されました。"
