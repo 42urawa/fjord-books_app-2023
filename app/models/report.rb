@@ -21,19 +21,19 @@ class Report < ApplicationRecord
     created_at.to_date
   end
 
-  def mentioning_report_ids
+  def find_report_ids
     content.scan(REPORT_URL_REGEXP)
            .map { |url| url.split('/')[-1].to_i }
            .uniq
   end
 
-  def exec_create_transaction
+  def save_with_mentions
     success = true
 
     ApplicationRecord.transaction do
       success &= save
-      mentioning_report_ids.each do |mentioning_report_id|
-        success &= active_mentions.create(mentioned_id: mentioning_report_id)
+      find_report_ids.each do |report_id|
+        success &= active_mentions.create(mentioned_id: report_id)
       end
       raise ActiveRecord::Rollback unless success
     end
@@ -41,13 +41,13 @@ class Report < ApplicationRecord
     success
   end
 
-  def exec_update_transaction(report_params)
+  def update_with_mentions(report_params)
     success = true
 
     ApplicationRecord.transaction do
       success &= update(report_params)
 
-      report_ids_in_content = mentioning_report_ids
+      report_ids_in_content = find_report_ids
       report_ids_in_db = mentioning_reports.map(&:id)
 
       inserted_report_ids = report_ids_in_content - report_ids_in_db

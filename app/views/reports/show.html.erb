@@ -6,9 +6,9 @@
 
 <div>
   <% if @report.mentioned_reports.exists? %>
-    <%= t('shared.mentions.mentions') %>
+    <%= t('.mentions') %>
   <% else %>
-    <%= t('shared.mentions.no_mentions') %>
+    <%= t('.no_mentions') %>
   <% end %>
 </div>
 
