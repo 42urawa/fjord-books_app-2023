@@ -7,14 +7,6 @@ class ReportTest < ActiveSupport::TestCase
     @user = FactoryBot.create(:user)
     @report1 = FactoryBot.create(:report)
     @report2 = FactoryBot.create(:report)
-  #
-  #   title = 'TITLE'
-  #   content = <<~TEXT
-  #     http://localhost:3000/reports/#{@report1.id}
-  #     http://localhost:3000/reports/#{@report2.id}
-  #   TEXT
-  #
-  #   @report = user.reports.build(title:, content:)
   end
 
   test 'should not save report without title' do
@@ -44,7 +36,6 @@ class ReportTest < ActiveSupport::TestCase
   end
 
   test 'should not mention the duplicate report' do
-    # report3 = FactoryBot.build(:report3)
     content = <<~TEXT
       http://localhost:3000/reports/#{@report1.id}
       http://localhost:3000/reports/#{@report2.id}
