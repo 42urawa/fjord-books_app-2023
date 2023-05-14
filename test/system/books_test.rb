@@ -4,9 +4,9 @@ require 'application_system_test_case'
 
 class BooksTest < ApplicationSystemTestCase
   setup do
-    @book = books(:one)
-    user1 = users(:user1)
-    sign_in(user1)
+    @book = FactoryBot.create(:book)
+    user = FactoryBot.create(:user)
+    sign_in(user)
   end
 
   test 'visiting the index' do

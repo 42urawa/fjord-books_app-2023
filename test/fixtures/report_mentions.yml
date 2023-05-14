@@ -1,7 +1,0 @@
-mention1:
-  mention_to: report1
-  mentioned_by: report2
-
-mention2:
-  mention_to: report2
-  mentioned_by: report1

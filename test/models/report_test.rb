@@ -4,47 +4,58 @@ require 'test_helper'
 
 class ReportTest < ActiveSupport::TestCase
   def setup
-    user = users(:user1)
-    @report1 = reports(:report1)
-    @report2 = reports(:report2)
+    @user = FactoryBot.create(:user)
+    @report1 = FactoryBot.create(:report)
+    @report2 = FactoryBot.create(:report)
+  #
+  #   title = 'TITLE'
+  #   content = <<~TEXT
+  #     http://localhost:3000/reports/#{@report1.id}
+  #     http://localhost:3000/reports/#{@report2.id}
+  #   TEXT
+  #
+  #   @report = user.reports.build(title:, content:)
+  end
 
-    title = 'TITLE'
+  test 'should not save report without title' do
+    # user = FactoryBot.create(:user)
+    report = FactoryBot.build(:report, title: '', user: @user)
+    assert_not report.save
+  end
+
+  test 'should not save report without content' do
+    report = FactoryBot.build(:report, content: '', user: @user)
+    assert_not report.save
+  end
+
+  test 'should save report with title and content' do
+    report = FactoryBot.build(:report, user: @user)
+    assert report.save
+  end
+
+  test 'should get mentioning reports' do
     content = <<~TEXT
       http://localhost:3000/reports/#{@report1.id}
       http://localhost:3000/reports/#{@report2.id}
     TEXT
 
-    @report = user.reports.build(title:, content:)
+    report = FactoryBot.create(:report, user: @user, content:)
+    assert_equal [], report.mentioning_reports.map(&:id) - [@report1.id, @report2.id]
   end
 
-  test 'should not save report without title' do
-    @report.title = ''
-    assert_not @report.save
-  end
-
-  test 'should not save report without content' do
-    @report.content = ''
-    assert_not @report.save
-  end
-
-  test 'should save report with title and content and mention reports' do
-    assert @report.save
-    assert [], @report.mentioning_reports.map(&:id) - [@report1.id, @report2.id]
-  end
-
-  test 'should not mention the same report' do
-    report3 = reports(:report3)
-    @report.content += <<TEXT
+  test 'should not mention the duplicate report' do
+    # report3 = FactoryBot.build(:report3)
+    content = <<~TEXT
       http://localhost:3000/reports/#{@report1.id}
       http://localhost:3000/reports/#{@report2.id}
-      http://localhost:3000/reports/#{report3.id}
-TEXT
+      http://localhost:3000/reports/#{@report2.id}
+    TEXT
 
-    @report.save
-    assert_equal [], @report.mentioning_reports.map(&:id) - [@report1.id, @report2.id, report3.id]
+    report = FactoryBot.create(:report, user: @user, content:)
+    assert_equal [], report.mentioning_reports.map(&:id) - [@report1.id, @report2.id]
   end
 
-  test 'should not mention own report' do
+  test 'should not mention self report' do
     new_content = <<TEXT
       http://localhost:3000/reports/#{@report1.id}
       http://localhost:3000/reports/#{@report2.id}
@@ -54,18 +65,19 @@ TEXT
   end
 
   test 'should not edit another report' do
-    report = reports(:report1)
-    assert_not report.editable?(users(:user2))
+    user1 = FactoryBot.create(:user)
+    user2 = FactoryBot.create(:user)
+    report = FactoryBot.create(:report, user: user1)
+    assert_not report.editable?(user2)
   end
 
   test 'should edit own report' do
-    report = reports(:report1)
-    assert report.editable?(users(:user1))
+    report = FactoryBot.create(:report)
+    assert report.editable?(report.user)
   end
 
   test 'should get only date' do
-    report = reports(:report1)
-    p report.created_at
+    report = FactoryBot.create(:report)
     assert_equal report.created_at.to_date, report.created_on
   end
 end
