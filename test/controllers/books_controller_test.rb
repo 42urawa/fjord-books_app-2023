@@ -4,7 +4,9 @@ require 'test_helper'
 
 class BooksControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @book = books(:one)
+    @book = FactoryBot.create(:book)
+    user = FactoryBot.create(:user)
+    sign_in(user)
   end
 
   test 'should get index' do
