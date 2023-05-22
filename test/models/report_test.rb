@@ -68,7 +68,7 @@ TEXT
   end
 
   test 'should get only date' do
-    report = FactoryBot.create(:report)
-    assert_equal report.created_at.to_date, report.created_on
+    report = FactoryBot.create(:report, created_at: '2023-05-22 12:34:56')
+    assert_equal Date.new(2023, 5, 22), report.created_on
   end
 end

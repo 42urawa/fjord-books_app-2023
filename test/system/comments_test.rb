@@ -2,10 +2,11 @@
 
 require 'application_system_test_case'
 
-class ReportsTest < ApplicationSystemTestCase
+class CommentsTest < ApplicationSystemTestCase
   setup do
     @user1 = FactoryBot.create(:user)
     @user2 = FactoryBot.create(:user)
+    @user3 = FactoryBot.create(:user)
     sign_in(@user2)
     @report = FactoryBot.create(:report, user: @user1)
   end
@@ -18,6 +19,13 @@ class ReportsTest < ApplicationSystemTestCase
     assert_selector 'h1', text: '日報の詳細'
     assert_selector 'p', text: 'コメントが作成されました。'
     assert_selector 'li', text: comment
+    sign_out(@user2)
+    sign_in(@user3)
+    visit report_path(@report)
+    assert_no_button '削除'
+    sign_out(@user3)
+    sign_in(@user2)
+    visit report_path(@report)
     assert_selector 'li', text: comment
     assert_button '削除'
     accept_confirm do
